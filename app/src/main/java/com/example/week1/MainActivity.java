@@ -25,6 +25,7 @@ import com.google.android.material.tabs.TabLayout;
 public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     ContactFragment contact;
+    GalleryFragment gallery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         requestPerms();
         contact = new ContactFragment();
+        gallery = new GalleryFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, contact).commit();
 
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     selected = contact;
                 } else if (position == 1) {
-                    selected = contact;
+                    selected = gallery;
                 } else if (position == 2) {
                     selected = contact;
                 }
