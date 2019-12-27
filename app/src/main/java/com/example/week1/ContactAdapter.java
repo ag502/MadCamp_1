@@ -13,11 +13,13 @@ import java.util.ArrayList;
 public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class ContactViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView phoneNumber;
+        TextView name;
 
         public ContactViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.phone_number);
+            phoneNumber = itemView.findViewById(R.id.phone_number);
+            name = itemView.findViewById(R.id.name);
         }
     }
 
@@ -37,7 +39,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ContactViewHolder viewHolder = (ContactViewHolder) holder;
-        viewHolder.textView.setText(users.get(position).getPhoneNumber());
+        viewHolder.phoneNumber.setText(users.get(position).getPhoneNumber());
+        viewHolder.name.setText(users.get(position).getName());
     }
 
     @Override

@@ -25,11 +25,9 @@ public class ContactFragment extends Fragment {
         contactLayoutManager = new LinearLayoutManager(getContext());
         contactRecyclerView.setLayoutManager(contactLayoutManager);
 
-        ArrayList<UserInfo> users = new ArrayList<>();
-        users.add(new UserInfo("010-123-456"));
-        users.add(new UserInfo("010-456-789"));
-        users.add(new UserInfo("031-123-456"));
-        users.add(new UserInfo("031-000-000"));
+
+        ReadContact Reader = new ReadContact(getContext());
+        ArrayList<UserInfo> users = Reader.getContactList();
 
         ContactAdapter contactAdapter = new ContactAdapter(users);
         contactRecyclerView.setAdapter(contactAdapter);
