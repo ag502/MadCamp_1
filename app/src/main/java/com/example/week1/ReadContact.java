@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ public class ReadContact {
     }
 
     public ArrayList<UserInfo> getContactList() {
+        ArrayList<UserInfo> users = new ArrayList<>();
         try {
             Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
 
@@ -29,7 +29,7 @@ public class ReadContact {
 
             Cursor contactCursor = context.getContentResolver().query(uri, projection, null, null, null);
 
-            ArrayList<UserInfo> users = new ArrayList<>();
+
 
             if (contactCursor.moveToFirst()) {
                 do {
@@ -41,15 +41,15 @@ public class ReadContact {
                     } else if (phoneNumber.substring(0, 3).equals("031")) {
                         phoneNumber = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
                     }
-
+                    Log.d("READ", "----------------배열 삽입----------------");
                     users.add(new UserInfo(phoneNumber, name));
                 } while (contactCursor.moveToNext());
             }
             return users;
 
         } catch (Exception e) {
-            android.os.Process.killProcess(android.os.Process.myPid());
-            return null;
+            Log.d("ERROR", "--------------------불러오기 실패---------------------");
+            return users;
         }
     }
 }
