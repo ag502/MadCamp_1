@@ -76,46 +76,4 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-//    private boolean hasPermissions() {
-//        int res;
-//
-//        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
-//
-//        for (String perm : permissions) {
-//            res = checkCallingOrSelfPermission(perm);
-//
-//            if (!(res == PackageManager.PERMISSION_GRANTED)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//
-//    private void requestPerms() {
-//        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if (!hasPermissions()) {
-//                requestPermissions(permissions, 0);
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//        switch (requestCode) {
-//            case 0:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(getApplicationContext(), "권한이 승인 되었습니다.", Toast.LENGTH_LONG).show();
-//                    canDrawFragment = true;
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "권한이 거부 되었습니다.", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
-//                return;
-//        }
-//    }
 }
