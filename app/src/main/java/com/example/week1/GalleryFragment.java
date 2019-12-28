@@ -113,7 +113,7 @@ public class GalleryFragment extends Fragment {
 
         if (prepareData() != null){
             ArrayList<Uri> createLists = prepareData();
-            MyAdapter adapter = new MyAdapter(createLists);
+            MyAdapter adapter = new MyAdapter(getContext(), createLists);
             recyclerView.setAdapter(adapter);
         }
         // Inflate the layout for this fragment
@@ -130,7 +130,7 @@ public class GalleryFragment extends Fragment {
 
         if (prepareData() != null){
             ArrayList<Uri> createLists = prepareData();
-            MyAdapter adapter = new MyAdapter(createLists);
+            MyAdapter adapter = new MyAdapter(getContext(), createLists);
             recyclerView.setAdapter(adapter);
         }
     }

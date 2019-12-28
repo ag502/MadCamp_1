@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Uri> galleryList = null;
+    private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img;
@@ -37,8 +38,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public MyAdapter(ArrayList<Uri> galleryList) {
+    public MyAdapter(Context context, ArrayList<Uri> galleryList) {
         this.galleryList = galleryList;
+        this.context = context;
     }
 
 
@@ -52,17 +54,20 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
 //        myViewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         myViewHolder.img.setImageURI(galleryList.get(position));
 
-//        holder.itemView.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view){
-//                Intent intent = new Intent()
-//            }
-//        });
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(context, DetailActivity.class);
+                //intent.putExtra("uri", );
+                intent.putExtra("uri", galleryList.get(position).toString());
+                context.startActivity(intent);
+            }
+        });
     }
 
 
