@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ContactFragment contact;
     GalleryFragment gallery;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,16 +36,14 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        requestPerms();
-        contact = new ContactFragment();
-        gallery = new GalleryFragment();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, contact).commit();
-
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("연락처"));
         tabLayout.addTab(tabLayout.newTab().setText("갤러리"));
         tabLayout.addTab(tabLayout.newTab().setText("기타"));
+
+        contact = new ContactFragment();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, contact).commit();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -74,62 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
 
-    private boolean hasPermissions() {
-        int res;
-
-        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
-
-        for (String perm : permissions) {
-            res = checkCallingOrSelfPermission(perm);
-
-            if (!(res == PackageManager.PERMISSION_GRANTED)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void requestPerms() {
-        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!hasPermissions()) {
-                requestPermissions(permissions, 0);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        boolean allowed = true;
-        switch (requestCode) {
-//            case 0:
-//                for (int res : grantResults) {
-//                    allowed = allowed && (res == PackageManager.PERMISSION_GRANTED);
-//                }
-//                Log.d("cancel", "-------------------------------------------");
-//                break;
-//            default:
-//                allowed = false;
-//                Log.d("cancel", "-------------------------------------------");
-////                android.os.Process.killProcess(android.os.Process.myPid());
-//                break;
-//        }
-//
-//        if (!allowed) {
-//            Toast.makeText(getApplicationContext(), "권한이 거부 되었습니다.", Toast.LENGTH_LONG).show();
-//        }
-            case 0:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "권한이 승인 되었습니다.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "권한이 거부 되었습니다.", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-                return;
-        }
     }
 }
