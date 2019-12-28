@@ -93,7 +93,6 @@ public class GalleryFragment extends Fragment {
         super.onStart();
         RecyclerView recyclerView = v.findViewById(R.id.image_gallery);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         if (prepareData() != null){
