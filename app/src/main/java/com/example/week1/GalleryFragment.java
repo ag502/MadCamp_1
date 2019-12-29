@@ -2,7 +2,9 @@ package com.example.week1;
 
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,11 +16,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -44,6 +49,17 @@ public class GalleryFragment extends Fragment {
             }
         });
 
+        Button btnCamera = v.findViewById(R.id.btnCamera);
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
+
+
         return image_ids;
     }
 
@@ -51,7 +67,9 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == PICTURE_REQUEST_CODE) {
+            image_ids.clear();
             if (resultCode == RESULT_OK) {
                 Uri uri = data.getData();
                 ClipData clipData = data.getClipData();
@@ -62,10 +80,25 @@ public class GalleryFragment extends Fragment {
                         }
                     }
                 }
-
             }
         }
+        else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+//                Uri uri = data.getData();
+//                image_ids.add(uri);
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                Context inContext = getContext();
+                Uri uri = getImageUri(inContext, bitmap);
+                image_ids.add(uri);
+            }
+        }
+    }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
 
@@ -80,7 +113,7 @@ public class GalleryFragment extends Fragment {
 
         if (prepareData() != null){
             ArrayList<Uri> createLists = prepareData();
-            MyAdapter adapter = new MyAdapter(createLists);
+            MyAdapter adapter = new MyAdapter(getContext(), createLists);
             recyclerView.setAdapter(adapter);
         }
         // Inflate the layout for this fragment
@@ -97,8 +130,9 @@ public class GalleryFragment extends Fragment {
 
         if (prepareData() != null){
             ArrayList<Uri> createLists = prepareData();
-            MyAdapter adapter = new MyAdapter(createLists);
+            MyAdapter adapter = new MyAdapter(getContext(), createLists);
             recyclerView.setAdapter(adapter);
         }
     }
+
 }
