@@ -1,6 +1,7 @@
 package com.example.week1;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestPerms();
+
         setContentView(R.layout.activity_main);
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("기타"));
 
         contact = new ContactFragment();
+        gallery = new GalleryFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, contact).commit();
 
@@ -73,6 +80,48 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+
+    private boolean hasPermissions() {
+        int res;
+
+        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
+
+        for (String perm : permissions) {
+            res = ActivityCompat.checkSelfPermission(getApplication(), perm);
+
+            if (!(res == PackageManager.PERMISSION_GRANTED)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void requestPerms() {
+        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!hasPermissions()) {
+                requestPermissions(permissions, 0);
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case 0:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "권한이 승인 되었습니다.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "권한이 거부 되었습니다.", Toast.LENGTH_SHORT).show();
+                    System.exit(0);
+                }
+                return;
+        }
     }
 }
