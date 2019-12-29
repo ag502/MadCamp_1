@@ -1,12 +1,16 @@
 package com.example.week1;
 
 public class UserInfo {
+    private String id;
     private String name;
     private String phoneNumber;
+    private String thumbNail;
 
-    public UserInfo(String phoneNumber, String name) {
+    public UserInfo(String id, String phoneNumber, String name, String thumbNail) {
+        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.thumbNail = thumbNail;
     }
 
     public String getPhoneNumber() {
@@ -23,5 +27,21 @@ public class UserInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getThumbNail() {
+        return thumbNail;
+    }
+
+    public void setThumbNail(String thumbNail) {
+        this.thumbNail = thumbNail;
     }
 }
