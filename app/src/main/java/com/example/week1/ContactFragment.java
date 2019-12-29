@@ -1,6 +1,8 @@
 package com.example.week1;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresPermission;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,12 +28,13 @@ public class ContactFragment extends Fragment {
 
     private ArrayList<UserInfo> users;
     private ReadContact Reader;
-    boolean isRefresh = false;
+    private MainActivity mainActivity;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mainActivity = (MainActivity) getActivity();
         Log.d("View", "-------------------Fragment OnCreateView-------------------");
 
         v = inflater.inflate(R.layout.fragment_contact, container, false);
@@ -42,8 +43,12 @@ public class ContactFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_INSERT, Uri.parse("content://contacts/people"));
-                startActivity(intent);
+                if (mainActivity.permissionCheck("CONTACT") == 0) {
+                    Intent intent = new Intent(Intent.ACTION_INSERT, Uri.parse("content://contacts/people"));
+                    startActivity(intent);
+                } else {
+                    mainActivity.requestPerms();
+                }
             }
         });
 
@@ -53,18 +58,16 @@ public class ContactFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Reader = null;
         contactRecyclerView = v.findViewById(R.id.recycler_view);
         contactLayoutManager = new LinearLayoutManager(getContext());
         contactRecyclerView.setLayoutManager(contactLayoutManager);
 
-        Reader = new ReadContact(getContext());
-        users = Reader.getContactList();
-
-        Log.d("test", " " + users.size());
-
-        contactAdapter = new ContactAdapter(getContext(), users);
-        contactRecyclerView.setAdapter(contactAdapter);
+        if (ActivityCompat.checkSelfPermission(getContext(), Permission.getCertainPerm(0)) == PackageManager.PERMISSION_GRANTED) {
+            Reader = new ReadContact(getContext());
+            users = Reader.getContactList();
+            Log.d("test", " " + users.size());
+            contactAdapter = new ContactAdapter(getContext(), users);
+            contactRecyclerView.setAdapter(contactAdapter);
+        }
     }
-
 }

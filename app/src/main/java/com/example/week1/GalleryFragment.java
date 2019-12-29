@@ -35,6 +35,7 @@ import static android.app.Activity.RESULT_OK;
 public class GalleryFragment extends Fragment {
     public final int PICTURE_REQUEST_CODE = 100;
     private ArrayList<Uri> image_ids = new ArrayList<>();
+    private MainActivity mainActivity;
     View v;
 
     private ArrayList<Uri> prepareData(){
@@ -53,9 +54,12 @@ public class GalleryFragment extends Fragment {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //intent.setType("image/*");
-                startActivityForResult(intent, 1);
+                if (mainActivity.permissionCheck("STORAGE") != 0) {
+                    mainActivity.requestPerms();
+                } else {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, 1);
+                }
             }
         });
 
@@ -84,8 +88,6 @@ public class GalleryFragment extends Fragment {
         }
         else if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-//                Uri uri = data.getData();
-//                image_ids.add(uri);
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 Context inContext = getContext();
                 Uri uri = getImageUri(inContext, bitmap);
@@ -105,6 +107,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mainActivity = (MainActivity) getActivity();
         v = inflater.inflate(R.layout.fragment_gallery, container, false);
         RecyclerView recyclerView = v.findViewById(R.id.image_gallery);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),2);
@@ -116,7 +119,6 @@ public class GalleryFragment extends Fragment {
             MyAdapter adapter = new MyAdapter(getContext(), createLists);
             recyclerView.setAdapter(adapter);
         }
-        // Inflate the layout for this fragment
         return v;
     }
 

@@ -1,37 +1,31 @@
 package com.example.week1;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    ContactFragment contact;
-    GalleryFragment gallery;
-
+    private Toolbar toolbar;
+    private ContactFragment contact;
+    private GalleryFragment gallery;
+    private final String[] permissions = Permission.getPermissions();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("render", "-----------------MainActivity OnCreate--------------------");
         super.onCreate(savedInstanceState);
 
         requestPerms();
@@ -60,8 +54,14 @@ public class MainActivity extends AppCompatActivity {
                 Fragment selected = null;
 
                 if (position == 0) {
+                    if (permissionCheck("CONTACT") != 0 || permissionCheck("CALL") != 0) {
+                        requestPerms();
+                    }
                     selected = contact;
                 } else if (position == 1) {
+                    if (permissionCheck("STORAGE") != 0) {
+                        requestPerms();
+                    }
                     selected = gallery;
                 } else if (position == 2) {
                     selected = contact;
@@ -82,11 +82,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public int permissionCheck(String permKind) {
+        int res = -2;
+        switch (permKind) {
+            case "CONTACT":
+                res = ActivityCompat.checkSelfPermission(getApplication(), Permission.getPermissions()[0]);
+                return res;
+            case "CALL":
+                res = ActivityCompat.checkSelfPermission(getApplication(), Permission.getPermissions()[1]);
+                return res;
+            case "STORAGE":
+                res = ActivityCompat.checkSelfPermission(getApplication(), Permission.getPermissions()[2]);
+                return res;
+            default:
+                return res;
+        }
+    }
 
-    private boolean hasPermissions() {
+
+    private boolean AllPermissionCheck() {
         int res;
-
-        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
 
         for (String perm : permissions) {
             res = ActivityCompat.checkSelfPermission(getApplication(), perm);
@@ -98,11 +113,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void requestPerms() {
-        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
+    public void requestPerms() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!hasPermissions()) {
+            if (!AllPermissionCheck()) {
                 requestPermissions(permissions, 0);
             }
         }
@@ -112,16 +126,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case 0:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "권한이 승인 되었습니다.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "권한이 거부 되었습니다.", Toast.LENGTH_SHORT).show();
-                    System.exit(0);
-                }
-                return;
-        }
+//
+//        Log.d("permission: ", "--------------" + " "  + Arrays.toString(permissions));
+//        Log.d("grant: ", "--------------" + " "  + Arrays.toString(grantResults));
+//
+//        switch (requestCode) {
+//            case 0:
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    Toast.makeText(getApplicationContext(), "권한이 승인 되었습니다.", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "권한이 거부 되었습니다.", Toast.LENGTH_SHORT).show();
+//                }
+//                return;
+//        }
     }
+
 }

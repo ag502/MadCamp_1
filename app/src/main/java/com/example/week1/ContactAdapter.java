@@ -1,5 +1,6 @@
 package com.example.week1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,13 +20,18 @@ import java.util.ArrayList;
 
 public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private ArrayList<UserInfo> users;
+    private Context context;
+    private MainActivity mainActivity;
+
     class ContactViewHolder extends RecyclerView.ViewHolder {
         private TextView phoneNumber;
         private TextView name;
         private ImageView thumbnail;
         private Button deleteButton;
         private Button callButton;
-        private Button editButton;
+
+
 
         public ContactViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -34,6 +40,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             thumbnail = itemView.findViewById(R.id.user_thumbnail);
             deleteButton = itemView.findViewById(R.id.delete_button);
             callButton = itemView.findViewById(R.id.call_button);
+            mainActivity = (MainActivity) context;
 
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -49,8 +56,12 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             callButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+users.get(getAdapterPosition()).getPhoneNumber()));
-                    context.startActivity(intent);
+                    if (mainActivity.permissionCheck("CALL") != 0) {
+                        mainActivity.requestPerms();
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+users.get(getAdapterPosition()).getPhoneNumber()));
+                        context.startActivity(intent);
+                    }
                 }
             });
 
@@ -64,8 +75,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    ArrayList<UserInfo> users;
-    Context context;
+
 
     public ContactAdapter(Context context, ArrayList<UserInfo> users) {
         this.context = context;
@@ -87,6 +97,7 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (users.get(position).getThumbNail() != null) {
             viewHolder.thumbnail.setImageURI(Uri.parse(users.get(position).getThumbNail()));
         }
+//        mainActivity = ((MainActivity) context).permissionCheck()
     }
 
     @Override
