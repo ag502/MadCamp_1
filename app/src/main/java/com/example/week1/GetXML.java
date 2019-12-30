@@ -18,6 +18,11 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
     private String getPage;
     private String totalPage = null;
     private String numOfRows = null;
+    String url;
+
+    public GetXML(String url) {
+        this.url = url;
+    }
 
 
     @Override
@@ -30,8 +35,10 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
             getPage = "1";
         }
         try {
-            url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=FmD3e%2FhDm47HLlFHkAp7gBaIK8WlW5BDMs7OhhU9EJ95VyiOWW%2BGtQ39sCPOpn0OF%2FfE0rYzt%2Fxwdta9FJN16w%3D%3D&keyword=캠핑&MobileOS=ETC&MobileApp=AppTest&pageNo=" + getPage);
-            boolean bAddress = false, bTitle = false, bImage = false, bNumOfRows = false, bTotalCount = false, bContentId = false;
+            url = new URL(this.url + getPage);
+            //url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=FmD3e%2FhDm47HLlFHkAp7gBaIK8WlW5BDMs7OhhU9EJ95VyiOWW%2BGtQ39sCPOpn0OF%2FfE0rYzt%2Fxwdta9FJN16w%3D%3D&keyword=호텔&MobileOS=ETC&MobileApp=AppTest&pageNo=" + getPage);
+            boolean bAddress = false, bTitle = false, bImage = false, bNumOfRows = false, bTotalCount = false, bContentId = false, bTel = false
+                    , bMapx = false, bMapy = false, bContentTypeId = false;
             InputStream inputStream = url.openStream();
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 
@@ -74,6 +81,18 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
                         if (parser.getName().equals("contentid")) {
                             bContentId = true;
                         }
+                        if (parser.getName().equals("contenttypeid")) {
+                            bContentTypeId = true;
+                        }
+                        if (parser.getName().equals("tel")) {
+                            bTel = true;
+                        }
+                        if (parser.getName().equals("mapx")) {
+                            bMapx = true;
+                        }
+                        if (parser.getName().equals("mapy")) {
+                            bMapy = true;
+                        }
                         break;
                     case XmlPullParser.TEXT:
                         if (bAddress) {
@@ -94,6 +113,18 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
                         } else if (bContentId) {
                             landMark.getTagList().put("contentid", parser.getText());
                             bContentId = false;
+                        } else if (bTel) {
+                            landMark.getTagList().put("tel", parser.getText());
+                            bTel = false;
+                        } else if (bMapx) {
+                            landMark.getTagList().put("mapx", parser.getText());
+                            bMapx = false;
+                        } else if (bMapy) {
+                            landMark.getTagList().put("mapy", parser.getText());
+                            bMapy = false;
+                        } else if (bContentTypeId) {
+                            landMark.getTagList().put("contenttypeid", parser.getText());
+                            bContentTypeId = false;
                         }
                         break;
                 }

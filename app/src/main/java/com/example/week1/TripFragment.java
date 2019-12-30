@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 public class TripFragment extends Fragment {
@@ -28,13 +29,17 @@ public class TripFragment extends Fragment {
     private Button prev;
     private Button next;
     int currentPage = 1;
+    String url;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("Error", "---------------------OnCreateView--------------------");
         v = inflater.inflate(R.layout.fragment_trip, container, false);
-        getXML = new GetXML();
+
+        url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=FmD3e%2FhDm47HLlFHkAp7gBaIK8WlW5BDMs7OhhU9EJ95VyiOWW%2BGtQ39sCPOpn0OF%2FfE0rYzt%2Fxwdta9FJN16w%3D%3D&keyword=궁&MobileOS=ETC&MobileApp=AppTest&pageNo=";
+
+        getXML = new GetXML(url);
 
         try {
             landMarkArrayList = getXML.execute().get();
@@ -57,10 +62,14 @@ public class TripFragment extends Fragment {
             public void onClick(View v) {
                 if (currentPage > 1) {
                     currentPage--;
-                    getXML = new GetXML();
-                    getXML.execute(Integer.toString(currentPage));
-                    tripAdapter = new TripAdapter(landMarkArrayList, getContext());
-                    tripRecyclerView.setAdapter(tripAdapter);
+                    getXML = new GetXML(url);
+                    try {
+                        landMarkArrayList = getXML.execute(Integer.toString(currentPage)).get();
+                        tripAdapter = new TripAdapter(landMarkArrayList, getContext());
+                        tripRecyclerView.setAdapter(tripAdapter);
+                    } catch (Exception e) {
+                        Log.d("Error", "------------------" + e + "-----------------");
+                    }
                 } else {
                     Toast.makeText(getContext(), "첫 번째 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -74,7 +83,7 @@ public class TripFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 currentPage++;
-                getXML = new GetXML();
+                getXML = new GetXML(url);
                 try {
                     landMarkArrayList = getXML.execute(Integer.toString(currentPage)).get();
                     tripAdapter = new TripAdapter(landMarkArrayList, getContext());
