@@ -6,10 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.app.ActionBar;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -18,15 +20,19 @@ import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
+    private int currentTabPostion;
     private Toolbar toolbar;
+    private ActionBar actionBar;
     private ContactFragment contact;
     private GalleryFragment gallery;
+    private TripFragment tripInfo;
     private final String[] permissions = Permission.getPermissions();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("render", "-----------------MainActivity OnCreate--------------------");
         super.onCreate(savedInstanceState);
+
 
         requestPerms();
 
@@ -43,28 +49,30 @@ public class MainActivity extends AppCompatActivity {
 
         contact = new ContactFragment();
         gallery = new GalleryFragment();
+        tripInfo = new TripFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, contact).commit();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                Log.d("MainActivity", "선택된 탭" + position);
+                currentTabPostion = tab.getPosition();
+                Log.d("MainActivity", "선택된 탭" + currentTabPostion);
                 Fragment selected = null;
 
-                if (position == 0) {
+                if (currentTabPostion == 0) {
                     if (permissionCheck("CONTACT") != 0 || permissionCheck("CALL") != 0) {
                         requestPerms();
                     }
                     selected = contact;
-                } else if (position == 1) {
+                } else if (currentTabPostion == 1) {
                     if (permissionCheck("STORAGE") != 0) {
                         requestPerms();
                     }
                     selected = gallery;
-                } else if (position == 2) {
-                    selected = contact;
+                } else if (currentTabPostion == 2) {
+                    selected = tripInfo;
+                    actionBar = getActionBar();
                 }
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, selected).commit();
@@ -126,19 +134,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//        Log.d("permission: ", "--------------" + " "  + Arrays.toString(permissions));
-//        Log.d("grant: ", "--------------" + " "  + Arrays.toString(grantResults));
-//
-//        switch (requestCode) {
-//            case 0:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(getApplicationContext(), "권한이 승인 되었습니다.", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "권한이 거부 되었습니다.", Toast.LENGTH_SHORT).show();
-//                }
-//                return;
-//        }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_actions, menu);
+        return true;
+    }
 }
