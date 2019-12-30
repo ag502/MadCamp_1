@@ -15,15 +15,23 @@ import java.util.ArrayList;
 public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
     private ArrayList<LandMark> landMarksList;
     private LandMark landMark;
+    private String getPage;
+    private String totalPage = null;
+    private String numOfRows = null;
 
 
     @Override
     protected ArrayList<LandMark> doInBackground(String... strings) {
+
         URL url;
         try {
-            url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&MobileApp=AppTest&MobileOS=ETC&pageNo=1&numOfRows=10&listYN=Y&arrange=A&contentTypeId=12&keyword=%ED%98%B8%ED%85%94");
-            boolean bAddress = false, bTitle = false, bImage = false;
-
+            getPage = strings[0];
+        } catch (Exception e) {
+            getPage = "1";
+        }
+        try {
+            url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=FmD3e%2FhDm47HLlFHkAp7gBaIK8WlW5BDMs7OhhU9EJ95VyiOWW%2BGtQ39sCPOpn0OF%2FfE0rYzt%2Fxwdta9FJN16w%3D%3D&keyword=캠핑&MobileOS=ETC&MobileApp=AppTest&pageNo=" + getPage);
+            boolean bAddress = false, bTitle = false, bImage = false, bNumOfRows = false, bTotalCount = false, bContentId = false;
             InputStream inputStream = url.openStream();
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 
@@ -57,6 +65,15 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
                         if (parser.getName().equals("firstimage")) {
                             bImage = true;
                         }
+                        if (parser.getName().equals("numOfRows")) {
+                            bNumOfRows = true;
+                        }
+                        if (parser.getName().equals("totalCount")) {
+                            bTotalCount = true;
+                        }
+                        if (parser.getName().equals("contentid")) {
+                            bContentId = true;
+                        }
                         break;
                     case XmlPullParser.TEXT:
                         if (bAddress) {
@@ -68,6 +85,15 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
                         } else if (bImage) {
                             landMark.getTagList().put("firstimage", parser.getText());
                             bImage = false;
+                        } else if (bNumOfRows) {
+                            numOfRows = parser.getText();
+                            bNumOfRows = false;
+                        } else if (bTotalCount) {
+                            numOfRows = parser.getText();
+                            bTotalCount = false;
+                        } else if (bContentId) {
+                            landMark.getTagList().put("contentid", parser.getText());
+                            bContentId = false;
                         }
                         break;
                 }
