@@ -1,7 +1,14 @@
 package com.example.week1;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.xmlpull.v1.XmlPullParser;
@@ -16,9 +23,27 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
     private ArrayList<LandMark> landMarksList;
     private LandMark landMark;
     private String getPage;
+    private String getKeyword;
+    private Context context;
+    private Activity activity;
+    private CustomProgressDialog customProgressDialog;
     private String totalPage = null;
     private String numOfRows = null;
 
+
+    public GetXML(Context context, Activity activity) {
+        this.context = context;
+        this.activity = activity;
+    }
+
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        customProgressDialog = new CustomProgressDialog(activity);
+        customProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        customProgressDialog.show();
+    }
 
     @Override
     protected ArrayList<LandMark> doInBackground(String... strings) {
@@ -26,11 +51,12 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
         URL url;
         try {
             getPage = strings[0];
+            getKeyword = strings[1];
         } catch (Exception e) {
             getPage = "1";
         }
         try {
-            url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=FmD3e%2FhDm47HLlFHkAp7gBaIK8WlW5BDMs7OhhU9EJ95VyiOWW%2BGtQ39sCPOpn0OF%2FfE0rYzt%2Fxwdta9FJN16w%3D%3D&keyword=캠핑&MobileOS=ETC&MobileApp=AppTest&pageNo=" + getPage);
+            url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&MobileApp=AppTest&MobileOS=ETC&pageNo=" + getPage + "&numOfRows=10&listYN=Y&arrange=A&keyword=" + getKeyword );
             boolean bAddress = false, bTitle = false, bImage = false, bNumOfRows = false, bTotalCount = false, bContentId = false;
             InputStream inputStream = url.openStream();
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -107,10 +133,16 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
     }
 
     @Override
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate(values);
+    }
+
+    @Override
     protected void onPostExecute(ArrayList<LandMark> document) {
         super.onPostExecute(document);
         for (int i = 0; i < landMarksList.size(); i++) {
             Log.d("Print Element", "---------" + landMarksList.get(i).getTagList().get("firstimage"));
         }
+        customProgressDialog.dismiss();
     }
 }

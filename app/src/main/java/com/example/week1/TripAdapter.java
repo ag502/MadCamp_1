@@ -39,6 +39,10 @@ public class TripAdapter extends RecyclerView.Adapter {
         this.context = context;
     }
 
+    public void setAdapter(ArrayList<LandMark> landMarkArrayList) {
+        this.landMarkArrayList = landMarkArrayList;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,6 +58,8 @@ public class TripAdapter extends RecyclerView.Adapter {
 
         if (landMarkArrayList.get(position).getTagList().get("firstimage") != null) {
             Glide.with(context).load(landMarkArrayList.get(position).getTagList().get("firstimage")).into(tripViewHolder.mainImage);
+        } else {
+            tripViewHolder.mainImage.setImageResource(0);
         }
 
         if (position % 2 == 0) {
@@ -66,10 +72,5 @@ public class TripAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return landMarkArrayList.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return Long.parseLong(landMarkArrayList.get(position).getTagList().get("contentid"));
     }
 }

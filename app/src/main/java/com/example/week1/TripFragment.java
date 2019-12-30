@@ -27,17 +27,17 @@ public class TripFragment extends Fragment {
     private GetXML getXML;
     private Button prev;
     private Button next;
-    int currentPage = 1;
+//    int currentPage = 1;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("Error", "---------------------OnCreateView--------------------");
         v = inflater.inflate(R.layout.fragment_trip, container, false);
-        getXML = new GetXML();
+        getXML = new GetXML(getContext(), getActivity());
 
         try {
-            landMarkArrayList = getXML.execute().get();
+            landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
         } catch (Exception e) {
             Log.d("Error", "------------------" + e + "-----------------");
         }
@@ -47,7 +47,6 @@ public class TripFragment extends Fragment {
         tripRecyclerView.setLayoutManager(tripLayoutManager);
 
         tripAdapter = new TripAdapter(landMarkArrayList, getContext());
-        tripAdapter.setHasStableIds(true);
         tripRecyclerView.setAdapter(tripAdapter);
 
         prev = v.findViewById(R.id.prev);
@@ -55,12 +54,18 @@ public class TripFragment extends Fragment {
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentPage > 1) {
-                    currentPage--;
-                    getXML = new GetXML();
-                    getXML.execute(Integer.toString(currentPage));
-                    tripAdapter = new TripAdapter(landMarkArrayList, getContext());
-                    tripRecyclerView.setAdapter(tripAdapter);
+                if (Keyword.getCurrentPage() > 1) {
+                    Keyword.setCurrentPage(Keyword.getCurrentPage() - 1);
+                    Log.d("print", "---------------" + Keyword.getKeyword());
+                    getXML = new GetXML(getContext(), getActivity());
+                    try {
+                        landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
+
+                    } catch (Exception e) {
+                        Log.d("Error", "------------------" + e + "-----------------");
+                    }
+                    tripAdapter.setAdapter(landMarkArrayList);
+                    tripAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "첫 번째 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -73,15 +78,15 @@ public class TripFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentPage++;
-                getXML = new GetXML();
+                Keyword.setCurrentPage(Keyword.getCurrentPage() + 1);
+                getXML = new GetXML(getContext(), getActivity());
                 try {
-                    landMarkArrayList = getXML.execute(Integer.toString(currentPage)).get();
-                    tripAdapter = new TripAdapter(landMarkArrayList, getContext());
-                    tripRecyclerView.setAdapter(tripAdapter);
+                    landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
                 } catch (Exception e) {
                     Log.d("Error", "------------------" + e + "-----------------");
                 }
+                tripAdapter.setAdapter(landMarkArrayList);
+                tripAdapter.notifyDataSetChanged();
             }
         });
 
