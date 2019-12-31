@@ -77,11 +77,7 @@ public class TripFragment extends Fragment {
                     try {
                         landMarkArrayList = getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword()).get();
                         totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
-<<<<<<< HEAD:app/src/main/java/com/example/week1/TripFragment.java
-                        pageInfo.setText(Keyword.getCurrentPage() + " / " + totalPage);
-=======
                         pageInfo.setText(String.valueOf(UrlInfo.getCurrentPage()) + " / " + String.valueOf(totalPage));
->>>>>>> bb265dde7c216756793b19b445ee4f21da597bd8:app/src/main/java/com/example/week1/Fragments/TripFragment.java
                     } catch (Exception e) {
                         Log.d("Error", "------------------" + e + "-----------------");
                     }
@@ -105,23 +101,14 @@ public class TripFragment extends Fragment {
             public void onClick(View v) {
                 getXML = new GetXML(getContext(), getActivity());
 
-<<<<<<< HEAD:app/src/main/java/com/example/week1/TripFragment.java
-                if (Keyword.getCurrentPage() < totalPage) {
-                    Keyword.setCurrentPage(Keyword.getCurrentPage() + 1);
-=======
 
                 if (UrlInfo.getCurrentPage() < totalPage) {
                     UrlInfo.setCurrentPage(UrlInfo.getCurrentPage() + 1);
->>>>>>> bb265dde7c216756793b19b445ee4f21da597bd8:app/src/main/java/com/example/week1/Fragments/TripFragment.java
 
                     try {
                         landMarkArrayList = getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword()).get();
                         totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
-<<<<<<< HEAD:app/src/main/java/com/example/week1/TripFragment.java
-                        pageInfo.setText(Keyword.getCurrentPage() + " / " + totalPage);
-=======
                         pageInfo.setText(String.valueOf(UrlInfo.getCurrentPage()) + " / " + String.valueOf(totalPage));
->>>>>>> bb265dde7c216756793b19b445ee4f21da597bd8:app/src/main/java/com/example/week1/Fragments/TripFragment.java
                     } catch (Exception e) {
                         Log.d("Error", "------------------" + e + "-----------------");
                     }
