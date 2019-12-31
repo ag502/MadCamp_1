@@ -2,6 +2,7 @@ package com.example.week1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -12,21 +13,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.Toast;
+import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Arrays;
-
 
 public class MainActivity extends AppCompatActivity {
-    private int currentTabPostion;
+    private int currentTabPosition;
     private Toolbar toolbar;
     private ActionBar actionBar;
+    private TabLayout tabLayout;
+    private SearchView searchView;
+    private MenuItem searchItem;
     private ContactFragment contact;
     private GalleryFragment gallery;
     private TripFragment tripInfo;
+    private EmptyFragement empty;
     private final String[] permissions = Permission.getPermissions();
+    private boolean isSearch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("연락처"));
         tabLayout.addTab(tabLayout.newTab().setText("갤러리"));
         tabLayout.addTab(tabLayout.newTab().setText("기타"));
@@ -50,28 +54,36 @@ public class MainActivity extends AppCompatActivity {
         contact = new ContactFragment();
         gallery = new GalleryFragment();
         tripInfo = new TripFragment();
+        empty = new EmptyFragement();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, contact).commit();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                currentTabPostion = tab.getPosition();
-                Log.d("MainActivity", "선택된 탭" + currentTabPostion);
+                currentTabPosition = tab.getPosition();
+                Log.d("MainActivity", "선택된 탭" + currentTabPosition);
                 Fragment selected = null;
 
-                if (currentTabPostion == 0) {
+                if (currentTabPosition == 0) {
+                    searchItem.setVisible(false);
                     if (permissionCheck("CONTACT") != 0 || permissionCheck("CALL") != 0) {
                         requestPerms();
                     }
                     selected = contact;
-                } else if (currentTabPostion == 1) {
+                } else if (currentTabPosition == 1) {
+                    searchItem.setVisible(false);
                     if (permissionCheck("STORAGE") != 0) {
                         requestPerms();
                     }
                     selected = gallery;
-                } else if (currentTabPostion == 2) {
-                    selected = tripInfo;
+                } else if (currentTabPosition == 2) {
+                    searchItem.setVisible(true);
+                    if (!isSearch) {
+                        selected = empty;
+                    } else {
+                        selected = tripInfo;
+                    }
                     actionBar = getActionBar();
                 }
 
@@ -139,6 +151,39 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_actions, menu);
+        searchItem = menu.findItem(R.id.action_search);
+        searchItem.setVisible(false);
+
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_keyword));
+
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                tabLayout.
+                if (currentTabPosition == 2) {
+                    GetXML getXML = new GetXML(getApplicationContext(), MainActivity.this);
+                    Keyword.setKeyword(query);
+                    Keyword.setCurrentPage(1);
+                    getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword());
+                    getSupportFragmentManager().beginTransaction().detach(tripInfo).attach(tripInfo).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, tripInfo).commit();
+                    isSearch = true;
+                    Log.d("print", "-------------------" + query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
+
+
 }
