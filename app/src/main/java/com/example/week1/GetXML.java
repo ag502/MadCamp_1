@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Document;
@@ -29,6 +30,7 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
     private CustomProgressDialog customProgressDialog;
     private String totalPage = null;
     private String numOfRows = null;
+    private String[] pageInfo = new String[2];
 
 
     public GetXML(Context context, Activity activity) {
@@ -36,6 +38,9 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
         this.activity = activity;
     }
 
+    public String[] getPageInfo() {
+        return pageInfo;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -112,10 +117,10 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
                             landMark.getTagList().put("firstimage", parser.getText());
                             bImage = false;
                         } else if (bNumOfRows) {
-                            numOfRows = parser.getText();
+                            pageInfo[0] = parser.getText();
                             bNumOfRows = false;
                         } else if (bTotalCount) {
-                            numOfRows = parser.getText();
+                            pageInfo[1] = parser.getText();
                             bTotalCount = false;
                         } else if (bContentId) {
                             landMark.getTagList().put("contentid", parser.getText());

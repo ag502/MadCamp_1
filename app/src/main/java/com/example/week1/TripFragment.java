@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,8 +26,11 @@ public class TripFragment extends Fragment {
     private ArrayList<LandMark> landMarkArrayList = null;
     private View v;
     private GetXML getXML;
+    private TextView pageInfo;
     private Button prev;
     private Button next;
+    private int totalPage;
+    private String pageView;
 //    int currentPage = 1;
 
     @Nullable
@@ -34,10 +38,15 @@ public class TripFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("Error", "---------------------OnCreateView--------------------");
         v = inflater.inflate(R.layout.fragment_trip, container, false);
+        pageInfo = v.findViewById(R.id.page);
+
         getXML = new GetXML(getContext(), getActivity());
 
         try {
             landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
+            totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
+//            pageView = Keyword.getCurrentPage() + " / " + totalPage;
+            pageInfo.setText(String.valueOf(Keyword.getCurrentPage()) + " / " + String.valueOf(totalPage));
         } catch (Exception e) {
             Log.d("Error", "------------------" + e + "-----------------");
         }
@@ -60,7 +69,8 @@ public class TripFragment extends Fragment {
                     getXML = new GetXML(getContext(), getActivity());
                     try {
                         landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
-
+                        totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
+                        pageInfo.setText(String.valueOf(Keyword.getCurrentPage()) + " / " + String.valueOf(totalPage));
                     } catch (Exception e) {
                         Log.d("Error", "------------------" + e + "-----------------");
                     }
@@ -78,15 +88,25 @@ public class TripFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Keyword.setCurrentPage(Keyword.getCurrentPage() + 1);
                 getXML = new GetXML(getContext(), getActivity());
-                try {
-                    landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
-                } catch (Exception e) {
-                    Log.d("Error", "------------------" + e + "-----------------");
+
+
+                if (Keyword.getCurrentPage() < totalPage) {
+                    Keyword.setCurrentPage(Keyword.getCurrentPage() + 1);
+
+                    try {
+                        landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
+                        totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
+                        pageInfo.setText(String.valueOf(Keyword.getCurrentPage()) + " / " + String.valueOf(totalPage));
+                    } catch (Exception e) {
+                        Log.d("Error", "------------------" + e + "-----------------");
+                    }
+
+                    tripAdapter.setAdapter(landMarkArrayList);
+                    tripAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "마지막 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 }
-                tripAdapter.setAdapter(landMarkArrayList);
-                tripAdapter.notifyDataSetChanged();
             }
         });
 
