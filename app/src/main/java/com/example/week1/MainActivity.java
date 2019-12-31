@@ -6,6 +6,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.ActionBar;
 import android.content.pm.PackageManager;
@@ -14,7 +16,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
+import com.example.week1.Data.UrlInfo;
+import com.example.week1.Data.Permission;
+import com.example.week1.Fragments.ContactFragment;
+import com.example.week1.Fragments.EmptyFragement;
+import com.example.week1.Fragments.GalleryFragment;
+import com.example.week1.Fragments.TripFragment;
+import com.example.week1.XML.GetXML;
 import com.google.android.material.tabs.TabLayout;
 
 
@@ -40,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
         requestPerms();
 
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
 
@@ -49,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("연락처"));
         tabLayout.addTab(tabLayout.newTab().setText("갤러리"));
-        tabLayout.addTab(tabLayout.newTab().setText("기타"));
+        tabLayout.addTab(tabLayout.newTab().setText("여행"));
 
         contact = new ContactFragment();
         gallery = new GalleryFragment();
@@ -165,10 +178,12 @@ public class MainActivity extends AppCompatActivity {
 //                tabLayout.
 
                 if (currentTabPosition == 2) {
+                    UrlInfo.setKeyword(query);
+                    UrlInfo.setCurrentPage(1);
+                    UrlInfo.setMode(UrlInfo.SEARCH_KEYWORD);
+
                     GetXML getXML = new GetXML(getApplicationContext(), MainActivity.this);
-                    Keyword.setKeyword(query);
-                    Keyword.setCurrentPage(1);
-                    getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword());
+                    getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword());
                     getSupportFragmentManager().beginTransaction().detach(tripInfo).attach(tripInfo).commit();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, tripInfo).commit();
                     isSearch = true;
@@ -187,5 +202,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment).commit();      // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
+    }
 
 }

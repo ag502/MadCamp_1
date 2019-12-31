@@ -1,11 +1,9 @@
-package com.example.week1;
+package com.example.week1.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.week1.Data.UserInfo;
+import com.example.week1.MainActivity;
+import com.example.week1.R;
 
 import java.util.ArrayList;
 

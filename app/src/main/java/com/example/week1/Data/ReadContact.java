@@ -1,11 +1,12 @@
-package com.example.week1;
+package com.example.week1.Data;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.util.Log;
+
+import com.example.week1.Data.UserInfo;
 
 import java.util.ArrayList;
 

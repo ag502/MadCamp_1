@@ -1,6 +1,5 @@
-package com.example.week1;
+package com.example.week1.Fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,6 +16,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.week1.Adapter.ContactAdapter;
+import com.example.week1.MainActivity;
+import com.example.week1.Data.Permission;
+import com.example.week1.R;
+import com.example.week1.Data.ReadContact;
+import com.example.week1.Data.UserInfo;
 
 import java.util.ArrayList;
 

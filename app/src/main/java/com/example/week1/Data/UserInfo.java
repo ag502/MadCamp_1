@@ -1,4 +1,4 @@
-package com.example.week1;
+package com.example.week1.Data;
 
 public class UserInfo {
     private String id;
