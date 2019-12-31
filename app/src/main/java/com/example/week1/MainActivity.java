@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
 //                tabLayout.
+
                 if (currentTabPosition == 2) {
                     GetXML getXML = new GetXML(getApplicationContext(), MainActivity.this);
                     Keyword.setKeyword(query);
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
                     isSearch = true;
                     Log.d("print", "-------------------" + query);
                 }
+                searchView.onActionViewCollapsed();
                 return false;
             }
 

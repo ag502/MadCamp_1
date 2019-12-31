@@ -65,7 +65,7 @@ public class TripAdapter extends RecyclerView.Adapter {
             tripViewHolder.mainImage.getLayoutParams().height = 600;
             Glide.with(context).load(landMarkArrayList.get(position).getTagList().get("firstimage")).into(tripViewHolder.mainImage);
         } else {
-            tripViewHolder.mainImage.setImageResource(0);
+            tripViewHolder.mainImage.getLayoutParams().height=0;
         }
 
         if (position % 2 == 0) {

@@ -74,12 +74,16 @@ public class TripFragment extends Fragment {
                     try {
                         landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
                         totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
-                        pageInfo.setText(String.valueOf(Keyword.getCurrentPage()) + " / " + String.valueOf(totalPage));
+                        pageInfo.setText(Keyword.getCurrentPage() + " / " + totalPage);
                     } catch (Exception e) {
                         Log.d("Error", "------------------" + e + "-----------------");
                     }
                     tripAdapter.setAdapter(landMarkArrayList);
                     tripAdapter.notifyDataSetChanged();
+
+                    if (tripRecyclerView.computeVerticalScrollOffset() != 0) {
+                        tripRecyclerView.smoothScrollToPosition(0);
+                    }
                 } else {
                     Toast.makeText(getContext(), "첫 번째 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -94,27 +98,32 @@ public class TripFragment extends Fragment {
             public void onClick(View v) {
                 getXML = new GetXML(getContext(), getActivity());
 
-
                 if (Keyword.getCurrentPage() < totalPage) {
                     Keyword.setCurrentPage(Keyword.getCurrentPage() + 1);
 
                     try {
                         landMarkArrayList = getXML.execute(Integer.toString(Keyword.getCurrentPage()), Keyword.getKeyword()).get();
                         totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
-                        pageInfo.setText(String.valueOf(Keyword.getCurrentPage()) + " / " + String.valueOf(totalPage));
+                        pageInfo.setText(Keyword.getCurrentPage() + " / " + totalPage);
                     } catch (Exception e) {
                         Log.d("Error", "------------------" + e + "-----------------");
                     }
 
                     tripAdapter.setAdapter(landMarkArrayList);
                     tripAdapter.notifyDataSetChanged();
+
+                    if (tripRecyclerView.computeVerticalScrollOffset() != 0) {
+                        tripRecyclerView.smoothScrollToPosition(0);
+                    }
                 } else {
                     Toast.makeText(getContext(), "마지막 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
         return v;
+    }
+
+    public RecyclerView getTripRecyclerView() {
+        return tripRecyclerView;
     }
 }
