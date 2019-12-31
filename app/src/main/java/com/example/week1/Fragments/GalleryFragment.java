@@ -1,4 +1,4 @@
-package com.example.week1;
+package com.example.week1.Fragments;
 
 
 import android.content.ClipData;
@@ -9,19 +9,20 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
+
+import com.example.week1.MainActivity;
+import com.example.week1.Adapter.MyAdapter;
+import com.example.week1.R;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

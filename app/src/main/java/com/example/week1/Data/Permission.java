@@ -1,4 +1,4 @@
-package com.example.week1;
+package com.example.week1.Data;
 
 import android.Manifest;
 import android.hardware.camera2.params.MandatoryStreamCombination;

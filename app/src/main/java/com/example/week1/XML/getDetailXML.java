@@ -1,9 +1,10 @@
-package com.example.week1;
+package com.example.week1.XML;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.w3c.dom.Document;
+import com.example.week1.Data.LandMark;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 

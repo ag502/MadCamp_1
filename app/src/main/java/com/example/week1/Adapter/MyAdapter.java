@@ -1,4 +1,4 @@
-package com.example.week1;
+package com.example.week1.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.week1.DetailActivity;
+import com.example.week1.R;
 
 import java.util.ArrayList;
 

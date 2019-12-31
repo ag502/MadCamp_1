@@ -1,17 +1,16 @@
-package com.example.week1;
+package com.example.week1.XML;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Document;
+import com.example.week1.CustomProgressDialog;
+import com.example.week1.Data.UrlInfo;
+import com.example.week1.Data.LandMark;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
@@ -61,7 +60,13 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
             getPage = "1";
         }
         try {
-            url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&MobileApp=AppTest&MobileOS=ETC&pageNo=" + getPage + "&numOfRows=10&listYN=Y&arrange=A&keyword=" + getKeyword );
+            if (UrlInfo.getMode() == UrlInfo.SEARCH_KEYWORD) {
+                url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&MobileApp=AppTest&MobileOS=ETC&pageNo=" + getPage + "&numOfRows=10&listYN=Y&arrange=A&keyword=" + getKeyword );
+            } else if (UrlInfo.getMode() == UrlInfo.SEARCH_AREA_CONTENT) {
+                url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&pageNo=" + getPage + "&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&contentTypeId=" + UrlInfo.getContentType() + "&areaCode=" + UrlInfo.getAreaCode() + "&listYN=Y");
+            } else {
+                url = null;
+            }
             boolean bAddress = false, bTitle = false, bImage = false, bNumOfRows = false, bTotalCount = false, bContentId = false, bTel = false
                     , bMapx = false, bMapy = false, bContentTypeId = false;;
             InputStream inputStream = url.openStream();

@@ -1,4 +1,4 @@
-package com.example.week1;
+package com.example.week1.Data;
 
 import java.util.HashMap;
 import java.util.Map;
