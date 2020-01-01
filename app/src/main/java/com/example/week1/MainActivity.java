@@ -27,6 +27,8 @@ import com.example.week1.Fragments.TripFragment;
 import com.example.week1.XML.GetXML;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Stack;
+
 
 public class MainActivity extends AppCompatActivity {
     private int currentTabPosition;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private EmptyFragement empty;
     private final String[] permissions = Permission.getPermissions();
     private boolean isSearch = false;
+    public Stack<OnBackKeyPressedListener> mFragmentBackStack = new Stack<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,4 +211,13 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment).commit();      // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
     }
 
+    public interface OnBackKeyPressedListener {
+        void onBack();
+    }
+
+    public void pushOnBackKeyPressedListener (OnBackKeyPressedListener listener) {
+        mFragmentBackStack.push(listener);
+    }
+
+    
 }

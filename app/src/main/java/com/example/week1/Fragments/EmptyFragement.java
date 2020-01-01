@@ -1,5 +1,6 @@
 package com.example.week1.Fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import java.util.List;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
-public class EmptyFragement extends Fragment {
+public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPressedListener{
     private AutoScrollViewPager autoViewPager;
     private View v;
     private int selectedArea = -1;
@@ -178,5 +179,16 @@ public class EmptyFragement extends Fragment {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onBack() {
+        getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((MainActivity) context).pushOnBackKeyPressedListener(this);
     }
 }

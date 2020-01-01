@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,20 +61,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         if (firstimage != null) {
             Glide.with(getApplicationContext()).load(firstimage).centerCrop().into(imageView);
         } else {
-            imageView.setVisibility(View.GONE);
-        Glide.with(getApplicationContext()).load(firstimage).centerCrop().into(imageView);
-        TextView textView = findViewById(R.id.title);
-        textView.setText(title);
-        textView.setTypeface(null, Typeface.BOLD);
-        TextView textView1 = findViewById(R.id.addr1);
-        textView1.setText(addr1);
-        TextView textView2 = findViewById(R.id.tel);
-        textView2.setText(tel);
-        TextView textView3 = findViewById(R.id.overview);
-        textView3.setText(Html.fromHtml(overview));
-        TextView textView4 = findViewById(R.id.homepage);
-        if(homepage != null) {
-            textView4.setText(Html.fromHtml(homepage));
+            imageView.getLayoutParams().height = 0;
         }
 
         TextView titleText = findViewById(R.id.title);
@@ -94,7 +82,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+ tel));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + tel));
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -104,13 +92,13 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         TextView linkText = findViewById(R.id.homepage);
 
-        if(homepage != null) {
+        if (homepage != null) {
             Log.d("PRINT", "++++++++++++++++++" + Html.fromHtml(homepage));
             linkText.setText(Html.fromHtml(homepage));
             Linkify.addLinks(linkText, Linkify.WEB_URLS);
             linkText.setMovementMethod(LinkMovementMethod.getInstance());
         }
-        SupportMapFragment mapFragment =  (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -123,12 +111,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(POINT);
         markerOptions.title(title);
-//        markerOptions.snippet(addr1);
         mMap.addMarker(markerOptions);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(POINT));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
     }
-
 }
 

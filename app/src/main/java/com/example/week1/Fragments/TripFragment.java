@@ -1,5 +1,6 @@
 package com.example.week1.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.week1.Data.UrlInfo;
 import com.example.week1.Data.LandMark;
+import com.example.week1.MainActivity;
 import com.example.week1.R;
 import com.example.week1.Adapter.TripAdapter;
 import com.example.week1.XML.GetXML;
 
 import java.util.ArrayList;
 
-public class TripFragment extends Fragment {
+public class TripFragment extends Fragment implements MainActivity.OnBackKeyPressedListener {
 
     private RecyclerView tripRecyclerView;
     private RecyclerView.LayoutManager tripLayoutManager;
@@ -127,7 +129,15 @@ public class TripFragment extends Fragment {
         return v;
     }
 
-    public RecyclerView getTripRecyclerView() {
-        return tripRecyclerView;
+
+    @Override
+    public void onBack() {
+        getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((MainActivity) context).pushOnBackKeyPressedListener(this);
     }
 }
