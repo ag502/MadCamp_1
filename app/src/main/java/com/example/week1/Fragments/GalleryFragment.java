@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -33,7 +34,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends Fragment{
     public final int PICTURE_REQUEST_CODE = 100;
     private ArrayList<Uri> image_ids = new ArrayList<>();
     private MainActivity mainActivity;
@@ -137,5 +138,4 @@ public class GalleryFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         }
     }
-
 }

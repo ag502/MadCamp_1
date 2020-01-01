@@ -150,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void requestPerms() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!AllPermissionCheck()) {
                 requestPermissions(permissions, 0);
@@ -187,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
 
                     GetXML getXML = new GetXML(getApplicationContext(), MainActivity.this);
                     getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword());
-                    getSupportFragmentManager().beginTransaction().detach(tripInfo).attach(tripInfo).commit();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, tripInfo).commit();
+//                    getSupportFragmentManager().beginTransaction().detach(tripInfo).attach(tripInfo).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, tripInfo).addToBackStack(null).commit();
                     isSearch = true;
                     Log.d("print", "-------------------" + query);
                 }
@@ -208,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment).commit();      // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
+        fragmentTransaction.replace(R.id.frame_layout, fragment).addToBackStack(null).commit();
     }
 
     public interface OnBackKeyPressedListener {
@@ -219,5 +218,12 @@ public class MainActivity extends AppCompatActivity {
         mFragmentBackStack.push(listener);
     }
 
-    
+    @Override
+    public void onBackPressed() {
+        if (!mFragmentBackStack.isEmpty()) {
+            mFragmentBackStack.pop().onBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

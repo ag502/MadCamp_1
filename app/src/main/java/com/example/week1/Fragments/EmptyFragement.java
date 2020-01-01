@@ -27,7 +27,7 @@ import java.util.List;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
-public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPressedListener{
+public class EmptyFragement extends Fragment{
     private AutoScrollViewPager autoViewPager;
     private View v;
     private int selectedArea = -1;
@@ -171,16 +171,7 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
         builder.show();
     }
 
-    @Override
-    public void onBack() {
-        getFragmentManager().popBackStack();
-    }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        ((MainActivity) context).pushOnBackKeyPressedListener(this);
-    }
 
     public void addDialog(final int pos, int catNum, String[] catItems) {
         final List<String> Cat1 = new ArrayList<>();
@@ -251,7 +242,4 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
         });
         buildercat1.show();
     }
-
-
-
 }
