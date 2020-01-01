@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, tripInfo).addToBackStack(null).commit();
                     getSupportFragmentManager().beginTransaction().detach(tripInfo).attach(tripInfo).commit();
-                    
+
                     isSearch = true;
                 }
                 searchView.onActionViewCollapsed();
