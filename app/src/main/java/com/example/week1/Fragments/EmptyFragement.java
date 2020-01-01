@@ -3,6 +3,7 @@ package com.example.week1.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
     private View v;
     private int selectedArea = -1;
     private int selectedContent = -1;
+    private String selectedCat1 = "";
+    private String selectedCat2 = "";
+    private String selectedCat3 = "";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,6 +60,9 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
                 if (selectedArea != -1 && selectedContent != -1) {
                     UrlInfo.setAreaCode(selectedArea);
                     UrlInfo.setContentType(selectedContent);
+                    UrlInfo.setSelectedCat1(selectedCat1);
+                    UrlInfo.setSelectedCat2(selectedCat2);
+                    UrlInfo.setSelectedCat3(selectedCat3);
                     UrlInfo.setCurrentPage(1);
                     UrlInfo.setMode(UrlInfo.SEARCH_AREA_CONTENT);
                     ((MainActivity)getActivity()).replaceFragment(new TripFragment());
@@ -102,58 +109,6 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
             public void onClick(DialogInterface dialog, int pos) {
                 String selectedText = items[pos].toString();
                 selectedArea = APIConstant.AREA_LIST[pos];
-//                switch (selectedText) {
-//                    case "서울":
-//                        selectedArea = APIConstant.AREA_SEOUL;
-//                        break;
-//                    case "인천":
-//                        selectedArea = APIConstant.AREA_INCHEON;
-//                        break;
-//                    case "대전":
-//                        selectedArea = APIConstant.AREA_DAEJEON;
-//                        break;
-//                    case "대구":
-//                        selectedArea = APIConstant.AREA_DAEGU;
-//                        break;
-//                    case "광주":
-//                        selectedArea = APIConstant.AREA_GANGJU;
-//                        break;
-//                    case "부산":
-//                        selectedArea = APIConstant.AREA_BUSAN;
-//                        break;
-//                    case "울산":
-//                        selectedArea = APIConstant.AREA_ULSAN;
-//                        break;
-//                    case "세종":
-//                        selectedArea = APIConstant.AREA_SAEJONG;
-//                        break;
-//                    case "경기":
-//                        selectedArea = APIConstant.AREA_GYEONGGI;
-//                        break;
-//                    case "강원":
-//                        selectedArea = APIConstant.AREA_GANGWON;
-//                        break;
-//                    case "충북":
-//                        selectedArea = APIConstant.AREA_CHUNGBUK;
-//                        break;
-//                    case "충남":
-//                        selectedArea = APIConstant.AREA_CHUNGNAM;
-//                        break;
-//                    case "전북":
-//                        selectedArea = APIConstant.AREA_JEONBUK;
-//                    case "전남":
-//                        selectedArea = APIConstant.AREA_JEONNAM;
-//                        break;
-//                    case "경북":
-//                        selectedArea = APIConstant.AREA_GYEONGBUK;
-//                        break;
-//                    case "경남":
-//                        selectedArea = APIConstant.AREA_GYEONGNAM;
-//                        break;
-//                    case "제주":
-//                        selectedArea = APIConstant.AREA_JEJU;
-//                        break;
-//                }
                 Toast.makeText(getContext(), selectedText+"(으)로 이동합니다!", Toast.LENGTH_SHORT).show();
                 area.setText(selectedText);
             }
@@ -176,6 +131,41 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
                 selectedContent = APIConstant.CONTENT_LIST[pos];
                 Toast.makeText(getContext(), selectedText+"(으)로 이동합니다!", Toast.LENGTH_SHORT).show();
                 cnt.setText(selectedText);
+                if(pos == 0) {
+                    String[] cat1 = {"자연", "인문(문화/예술/역사)"};
+                    String[] cat21 = {"자연관광지", "관광자원"};
+                    String[] cat22 = {"역사관광지", "휴양관광지", "체험관광지", "산업관광지", "건축/조형물"};
+                    addDialog(2, cat1, cat21, cat22);
+                } else if(pos == 1) {
+                    selectedCat1 = "A02"; selectedCat2 = "A0206";
+                    String[] cat = {"박물관","기념관","전시관","컨벤션센터", "미술관/화랑", "공연장","문화원","외국문화원", "도서관","대형서점",
+                            "문화전수시설", "영화관", "어학당","학교"};
+                    addDialog(pos, 14, cat);
+                } else if(pos == 2) {
+                    selectedCat1 = "A02";
+                    String[] cat = {"축제", "공연/행사"};
+                    addDialog(pos,2, cat);
+                } else if(pos == 3) {
+                    selectedCat1 = "C01";
+                    String[] cat = {"가족코스", "나홀로코스", "힐링코스", "도보코스", "캠핑코스", "맛코스"};
+                    addDialog(pos,6, cat);
+                } else if(pos == 4) {
+                    selectedCat1 = "A03";
+                    String[] cat = {"레포츠소개", "육상 레포츠", "수상 레포츠", "항공 레포츠", "복합 레포츠"};
+                    addDialog(pos, 5, cat);
+                } else if(pos == 5) {
+                    selectedCat1 = "B02"; selectedCat2 = "B0201";
+                    String[] cat = {"숙박시설"};
+                    addDialog(pos, 1, cat);
+                } else if(pos == 6) {
+                    selectedCat1 = "A04"; selectedCat2 = "A0401";
+                    String[] cat = {"5일장", "상설시장", "백화점","면세점","할인매장","전문상가","공예","공방","관광기념품점", "특산물판매점"};
+                    addDialog(pos, 10, cat);
+                } else if(pos == 7) {
+                    selectedCat1 = "A05"; selectedCat2 = "A0502";
+                    String[] cat = {"한식","서양식","일식","중식","아시아식","패밀리레스토랑","이색음식점","채식전문점","바/까페","클럽"};
+                    addDialog(pos, 10, cat);
+                }
             }
         });
         builder.show();
@@ -191,4 +181,77 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
         super.onAttach(context);
         ((MainActivity) context).pushOnBackKeyPressedListener(this);
     }
+
+    public void addDialog(final int pos, int catNum, String[] catItems) {
+        final List<String> Cat1 = new ArrayList<>();
+        for (int i = 0; i < catNum; i++) {
+            Cat1.add(catItems[i]);
+        }
+        final CharSequence[] cat1items = Cat1.toArray(new String[Cat1.size()]);
+        final AlertDialog.Builder buildercat1 = new AlertDialog.Builder(getContext());
+        buildercat1.setItems(cat1items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedText = cat1items[which].toString();
+                Toast.makeText(getContext(), selectedText + " (으)로 이동합니다!", Toast.LENGTH_SHORT).show();
+                if(pos == 1){
+                    String[] cat3 = {"A02060100","A02060200","A02060300","A02060400","A02060500","A02060600","A02060700","A02060800","A02060900","A02061000","A02061100","A02061200","A02061300","A02061400"};
+                    selectedCat3 = cat3[which];
+                } else if (pos == 2){
+                    String[] cat2 = {"A0207", "A0208"};
+                    selectedCat2 = cat2[which];
+                } else if (pos == 3){
+                    String[] cat2 = {"C0112","C0113","C0114","C0115","C0116","C0117"};
+                    String[] cat3 = {"C01120001","C01130001","C01140001","C01150001", "C01160001","C01170001"};
+                    selectedCat2 = cat2[which];
+                    selectedCat3 = cat3[which];
+                } else if (pos == 4){
+                    String[] cat2 = {"A0301", "A0302", "A0303", "A0304", "A0305"};
+                    selectedCat2 = cat2[which];
+                } else if (pos == 6){
+                    selectedCat2 = "A0401";
+                    String[] cat3 = {"A04010100","A04010200","A04010300","A04010400","A04010500","A04010600","A04010700","A04010800","A04010900"};
+                    selectedCat3 = cat3[which];
+                } else if (pos == 7){
+                    selectedCat2 = "A0502";
+                    String[] cat3 = {"A05020100","A05020200","A05020300","A05020400","A05020500","A05020600","A05020700","A05020800","A05020900","A05021000"};
+                    selectedCat3 = cat3[which];
+                } else if (pos == 10){
+                    String[] cat2 = {"A0101", "A0102"};
+                    selectedCat2 = cat2[which];
+                } else if (pos == 11){
+                    String[] cat2 = {"A0201", "A0202", "A0203", "A0204", "A0205"};
+                    selectedCat2 = cat2[which];
+                }
+            }
+        });
+        buildercat1.show();
+    }
+
+    public void addDialog(int catNum, String[] cat1, final String[] cat21, final String[] cat22) {
+        final List<String> Cat1 = new ArrayList<>();
+        for (int i = 0; i < catNum; i++) {
+            Cat1.add(cat1[i]);
+        }
+        final CharSequence[] cat1items = Cat1.toArray(new String[Cat1.size()]);
+        final AlertDialog.Builder buildercat1 = new AlertDialog.Builder(getContext());
+        buildercat1.setItems(cat1items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedText = cat1items[which].toString();
+                Toast.makeText(getContext(), selectedText + " (으)로 이동합니다!", Toast.LENGTH_SHORT).show();
+                if (which == 0){
+                    selectedCat1 = "A01";
+                    addDialog(10,2, cat21);
+                } else if(which == 1){
+                    selectedCat1 = "A02";
+                    addDialog(11, 5, cat22);
+                }
+            }
+        });
+        buildercat1.show();
+    }
+
+
+
 }

@@ -63,7 +63,11 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
             if (UrlInfo.getMode() == UrlInfo.SEARCH_KEYWORD) {
                 url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&MobileApp=AppTest&MobileOS=ETC&pageNo=" + getPage + "&numOfRows=10&listYN=Y&arrange=A&keyword=" + getKeyword );
             } else if (UrlInfo.getMode() == UrlInfo.SEARCH_AREA_CONTENT) {
-                url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&pageNo=" + getPage + "&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&contentTypeId=" + UrlInfo.getContentType() + "&areaCode=" + UrlInfo.getAreaCode() + "&listYN=Y");
+                if(UrlInfo.getSelectedCat3().equals("NULL")){
+                    url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&pageNo=" + getPage + "&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&contentTypeId=" + UrlInfo.getContentType() + "&areaCode=" + UrlInfo.getAreaCode() + "&cat1=" + UrlInfo.getSelectedCat1() + "&cat2=" + UrlInfo.getSelectedCat2() + "&listYN=Y");
+                }
+                else{
+                    url = new URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=jG9PX8i%2BoC9KR%2BHgXx9KnkCfNed54pdkGVoLIEYO%2Fqpq3Hn17zjx%2BB%2B%2BXiZFeWxl13XMhiRu7aeW7%2BvvJI%2B%2Bpw%3D%3D&pageNo=" + getPage + "&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&contentTypeId=" + UrlInfo.getContentType() + "&areaCode=" + UrlInfo.getAreaCode() + "&cat1=" + UrlInfo.getSelectedCat1() + "&cat2=" + UrlInfo.getSelectedCat2() + "&cat3=" + UrlInfo.getSelectedCat3()+ "&listYN=Y");}
             } else {
                 url = null;
             }

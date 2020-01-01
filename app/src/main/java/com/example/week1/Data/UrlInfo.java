@@ -3,11 +3,17 @@ package com.example.week1.Data;
 public class UrlInfo {
     public final static int SEARCH_AREA_CONTENT = 1;
     public final static int SEARCH_KEYWORD = 2;
+    public final static String SELECTED_CAT1 = "";
+    public final static String SELECTED_CAT2 = "";
+    public final static String SELECTED_CAT3 = "NULL";
 
     private static String keyword;
     private static int areaCode;
     private static int contentType;
     private static int currentPage;
+    private static String selectedCat1;
+    private static String selectedCat2;
+    private static String selectedCat3;
 
     private static int mode = -1;
 
@@ -50,4 +56,17 @@ public class UrlInfo {
     public static void setContentType(int contentType) {
         UrlInfo.contentType = contentType;
     }
+
+    public static String getSelectedCat1() {return  selectedCat1;}
+
+    public static String getSelectedCat2() {return  selectedCat2;}
+
+    public static String getSelectedCat3() {return  selectedCat3;}
+
+    public static void setSelectedCat1(String cat1) {UrlInfo.selectedCat1 = cat1;}
+
+    public static void setSelectedCat2(String cat2) {UrlInfo.selectedCat2 = cat2;}
+
+    public static void setSelectedCat3(String cat3) {UrlInfo.selectedCat3 = cat3;}
+
 }

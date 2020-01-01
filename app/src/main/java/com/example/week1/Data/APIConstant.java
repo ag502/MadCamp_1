@@ -43,4 +43,12 @@ public class APIConstant {
             WALK_COURSE, REPORTS, HOTEL,
             SHOPPING, FOOD
     };
+
+    public static final String[] SIGHTSEEING_CAT1 = new String[]{
+                        "A01", "A02"
+    };
+
+
+
+
 }

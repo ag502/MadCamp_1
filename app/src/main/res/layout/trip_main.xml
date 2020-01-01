@@ -34,7 +34,7 @@
                 android:id="@+id/choosearea"
                 android:layout_width="141dp"
                 android:layout_height="142dp"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="32dp"
                 android:layout_marginRight="52dp"
                 android:background="@drawable/area1" />
 
