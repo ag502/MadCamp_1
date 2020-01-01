@@ -67,16 +67,6 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
-
-            thumbnail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("content://contacts/people/" + users.get(getAdapterPosition()).getId()));
-                    Log.d("Tel ID", "---------------" + users.get(getAdapterPosition()).getId() + users.get(getAdapterPosition()).getName()
-                    + users.get(getAdapterPosition()).getName());
-                    context.startActivity(intent);
-                }
-            });
         }
     }
 
