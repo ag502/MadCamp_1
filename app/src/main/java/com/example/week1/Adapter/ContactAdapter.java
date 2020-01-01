@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,8 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("content://contacts/people/" + users.get(getAdapterPosition()).getId()));
+                    Log.d("Tel ID", "---------------" + users.get(getAdapterPosition()).getId() + users.get(getAdapterPosition()).getName()
+                    + users.get(getAdapterPosition()).getName());
                     context.startActivity(intent);
                 }
             });

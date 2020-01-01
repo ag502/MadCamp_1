@@ -93,11 +93,7 @@ public class MainActivity extends AppCompatActivity {
                     selected = gallery;
                 } else if (currentTabPosition == 2) {
                     searchItem.setVisible(true);
-                    if (!isSearch) {
-                        selected = empty;
-                    } else {
-                        selected = tripInfo;
-                    }
+                    selected = empty;
                     actionBar = getActionBar();
                 }
 

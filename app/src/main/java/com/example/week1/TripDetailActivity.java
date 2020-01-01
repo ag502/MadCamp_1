@@ -105,7 +105,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         mMap.addMarker(markerOptions);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(POINT));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
     }
 }
 

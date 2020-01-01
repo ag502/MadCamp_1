@@ -8,6 +8,7 @@ import android.util.Log;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ReadContact {
     private Context context;
@@ -24,13 +25,16 @@ public class ReadContact {
 
             String[] projection = new String[] {
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+//                    ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID,
                     ContactsContract.CommonDataKinds.Phone.NUMBER,
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+//                    ContactsContract.RawContacts.Entity.RAW_CONTACT_ID,
+//                    ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY,
                     ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI
             };
 
 
-            contactCursor = context.getContentResolver().query(uri, projection, null, null, null);
+            contactCursor = context.getContentResolver().query(uri, projection, null, null, ContactsContract.Contacts.Entity.DISPLAY_NAME+" ASC");
 
 
 
@@ -46,15 +50,13 @@ public class ReadContact {
                     } else  {
                         phoneNumber = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
                     }
-//                    Log.d("READ", "----------------배열 삽입----------------");
-                    Log.d("Id", "dd" + thumbnail);
                     users.add(new UserInfo(id, phoneNumber, name, thumbnail));
                 } while (contactCursor.moveToNext());
             }
             return users;
 
         } catch (Exception e) {
-            Log.d("ERROR", "--------------------불러오기 실패---------------------");
+            Log.d("ERROR", "----------" + e);
             contactCursor.close();
             return users;
         } finally {
