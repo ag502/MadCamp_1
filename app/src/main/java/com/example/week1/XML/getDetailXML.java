@@ -72,18 +72,15 @@ public class getDetailXML  extends AsyncTask<String, Void, ArrayList<LandMark>> 
                 eventType = parser.next();
             }
         } catch (Exception e) {
-            Log.d("Error", "------------------" + e + "--------------------");
+            e.printStackTrace();
         }
 
         return landMarksList;
     }
 
-//    @Override
-//    protected void onPostExecute(ArrayList<LandMark> document) {
-//        super.onPostExecute(document);
-//        for (int i = 0; i < landMarksList.size(); i++) {
-//            Log.d("Print Element", "---------" + landMarksList.get(i).getTagList().get("firstimage"));
-//        }
-//    }
+    @Override
+    protected void onPostExecute(ArrayList<LandMark> document) {
+        super.onPostExecute(document);
+    }
 }
 

@@ -13,7 +13,6 @@ import android.app.ActionBar;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -21,7 +20,7 @@ import android.view.WindowManager;
 import com.example.week1.Data.UrlInfo;
 import com.example.week1.Data.Permission;
 import com.example.week1.Fragments.ContactFragment;
-import com.example.week1.Fragments.EmptyFragement;
+import com.example.week1.Fragments.TripMainFragment;
 import com.example.week1.Fragments.GalleryFragment;
 import com.example.week1.Fragments.TripFragment;
 import com.example.week1.XML.GetXML;
@@ -40,14 +39,14 @@ public class MainActivity extends AppCompatActivity {
     private ContactFragment contact;
     private GalleryFragment gallery;
     private TripFragment tripInfo;
-    private EmptyFragement empty;
+    private TripMainFragment empty;
     private final String[] permissions = Permission.getPermissions();
     private boolean isSearch = false;
     public Stack<OnBackKeyPressedListener> mFragmentBackStack = new Stack<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("render", "-----------------MainActivity OnCreate--------------------");
         super.onCreate(savedInstanceState);
 
 
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         contact = new ContactFragment();
         gallery = new GalleryFragment();
         tripInfo = new TripFragment();
-        empty = new EmptyFragement();
+        empty = new TripMainFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, contact).commit();
 
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 currentTabPosition = tab.getPosition();
-                Log.d("MainActivity", "선택된 탭" + currentTabPosition);
                 Fragment selected = null;
 
                 if (currentTabPosition == 0) {
@@ -177,19 +175,20 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                tabLayout.
 
                 if (currentTabPosition == 2) {
+                    GetXML getXML = new GetXML(getApplicationContext(), MainActivity.this);
+
                     UrlInfo.setKeyword(query);
                     UrlInfo.setCurrentPage(1);
                     UrlInfo.setMode(UrlInfo.SEARCH_KEYWORD);
 
-                    GetXML getXML = new GetXML(getApplicationContext(), MainActivity.this);
                     getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword());
-//                    getSupportFragmentManager().beginTransaction().detach(tripInfo).attach(tripInfo).commit();
+
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, tripInfo).addToBackStack(null).commit();
+                    getSupportFragmentManager().beginTransaction().detach(tripInfo).attach(tripInfo).commit();
+                    
                     isSearch = true;
-                    Log.d("print", "-------------------" + query);
                 }
                 searchView.onActionViewCollapsed();
                 return false;

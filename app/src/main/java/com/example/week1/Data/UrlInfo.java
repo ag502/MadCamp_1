@@ -3,14 +3,12 @@ package com.example.week1.Data;
 public class UrlInfo {
     public final static int SEARCH_AREA_CONTENT = 1;
     public final static int SEARCH_KEYWORD = 2;
-    public final static String SELECTED_CAT1 = "";
-    public final static String SELECTED_CAT2 = "";
-    public final static String SELECTED_CAT3 = "NULL";
 
     private static String keyword;
     private static int areaCode;
     private static int contentType;
     private static int currentPage;
+    private static boolean isTotalCountZero;
     private static String selectedCat1;
     private static String selectedCat2;
     private static String selectedCat3;
@@ -69,4 +67,11 @@ public class UrlInfo {
 
     public static void setSelectedCat3(String cat3) {UrlInfo.selectedCat3 = cat3;}
 
+    public static boolean isIsTotalCountZero() {
+        return isTotalCountZero;
+    }
+
+    public static void setIsTotalCountZero(boolean isTotalCountZero) {
+        UrlInfo.isTotalCountZero = isTotalCountZero;
+    }
 }

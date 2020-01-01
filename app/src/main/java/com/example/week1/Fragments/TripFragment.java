@@ -37,8 +37,6 @@ public class TripFragment extends Fragment implements MainActivity.OnBackKeyPres
     private Button prev;
     private Button next;
     private int totalPage;
-    private String pageView;
-//    int currentPage = 1;
 
     @Nullable
     @Override
@@ -55,77 +53,81 @@ public class TripFragment extends Fragment implements MainActivity.OnBackKeyPres
             landMarkArrayList = getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword()).get();
             totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
 //            pageView = UrlInfo.getCurrentPage() + " / " + totalPage;
+            if (totalPage == 0) {
+                v = inflater.inflate(R.layout.fragment_page_not_found, container, false);
+            }
             pageInfo.setText(String.valueOf(UrlInfo.getCurrentPage()) + " / " + String.valueOf(totalPage));
         } catch (Exception e) {
-            Log.d("Error", "------------------" + e + "-----------------");
+            e.printStackTrace();
         }
 
-        tripRecyclerView = v.findViewById(R.id.trip_recycler_view);
-        tripLayoutManager = new LinearLayoutManager(getContext());
-        tripRecyclerView.setLayoutManager(tripLayoutManager);
+        if (totalPage != 0) {
+            tripRecyclerView = v.findViewById(R.id.trip_recycler_view);
+            tripLayoutManager = new LinearLayoutManager(getContext());
+            tripRecyclerView.setLayoutManager(tripLayoutManager);
 
-        tripAdapter = new TripAdapter(landMarkArrayList, getContext());
-        tripRecyclerView.setAdapter(tripAdapter);
+            tripAdapter = new TripAdapter(landMarkArrayList, getContext());
+            tripRecyclerView.setAdapter(tripAdapter);
 
-        prev = v.findViewById(R.id.prev);
+            prev = v.findViewById(R.id.prev);
 
-        prev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (UrlInfo.getCurrentPage() > 1) {
-                    UrlInfo.setCurrentPage(UrlInfo.getCurrentPage() - 1);
-                    Log.d("print", "---------------" + UrlInfo.getKeyword());
+            prev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (UrlInfo.getCurrentPage() > 1) {
+                        UrlInfo.setCurrentPage(UrlInfo.getCurrentPage() - 1);
+                        getXML = new GetXML(getContext(), getActivity());
+                        try {
+                            landMarkArrayList = getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword()).get();
+                            totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
+                            pageInfo.setText(String.valueOf(UrlInfo.getCurrentPage()) + " / " + String.valueOf(totalPage));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        tripAdapter.setAdapter(landMarkArrayList);
+                        tripAdapter.notifyDataSetChanged();
+
+                        if (tripRecyclerView.computeVerticalScrollOffset() != 0) {
+                            tripRecyclerView.smoothScrollToPosition(0);
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "첫 번째 페이지 입니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+            next = v.findViewById(R.id.next);
+
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     getXML = new GetXML(getContext(), getActivity());
-                    try {
-                        landMarkArrayList = getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword()).get();
-                        totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
-                        pageInfo.setText(String.valueOf(UrlInfo.getCurrentPage()) + " / " + String.valueOf(totalPage));
-                    } catch (Exception e) {
-                        Log.d("Error", "------------------" + e + "-----------------");
-                    }
-                    tripAdapter.setAdapter(landMarkArrayList);
-                    tripAdapter.notifyDataSetChanged();
 
-                    if (tripRecyclerView.computeVerticalScrollOffset() != 0) {
-                        tripRecyclerView.smoothScrollToPosition(0);
+
+                    if (UrlInfo.getCurrentPage() < totalPage) {
+                        UrlInfo.setCurrentPage(UrlInfo.getCurrentPage() + 1);
+
+                        try {
+                            landMarkArrayList = getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword()).get();
+                            totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
+                            pageInfo.setText(String.valueOf(UrlInfo.getCurrentPage()) + " / " + String.valueOf(totalPage));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        tripAdapter.setAdapter(landMarkArrayList);
+                        tripAdapter.notifyDataSetChanged();
+
+                        if (tripRecyclerView.computeVerticalScrollOffset() != 0) {
+                            tripRecyclerView.smoothScrollToPosition(0);
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "마지막 페이지 입니다.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(getContext(), "첫 번째 페이지 입니다.", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-
-        next = v.findViewById(R.id.next);
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getXML = new GetXML(getContext(), getActivity());
-
-
-                if (UrlInfo.getCurrentPage() < totalPage) {
-                    UrlInfo.setCurrentPage(UrlInfo.getCurrentPage() + 1);
-
-                    try {
-                        landMarkArrayList = getXML.execute(Integer.toString(UrlInfo.getCurrentPage()), UrlInfo.getKeyword()).get();
-                        totalPage = (int ) Math.ceil((Integer.parseInt(getXML.getPageInfo()[1]) / Double.parseDouble(getXML.getPageInfo()[0])));
-                        pageInfo.setText(String.valueOf(UrlInfo.getCurrentPage()) + " / " + String.valueOf(totalPage));
-                    } catch (Exception e) {
-                        Log.d("Error", "------------------" + e + "-----------------");
-                    }
-
-                    tripAdapter.setAdapter(landMarkArrayList);
-                    tripAdapter.notifyDataSetChanged();
-
-                    if (tripRecyclerView.computeVerticalScrollOffset() != 0) {
-                        tripRecyclerView.smoothScrollToPosition(0);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "마지막 페이지 입니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+            });
+        }
         return v;
     }
 

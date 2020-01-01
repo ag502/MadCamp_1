@@ -1,7 +1,6 @@
 package com.example.week1.Data;
 
 import android.Manifest;
-import android.hardware.camera2.params.MandatoryStreamCombination;
 
 public class Permission {
     private static String [] permissions = new String[] {

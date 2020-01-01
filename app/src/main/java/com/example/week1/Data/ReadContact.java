@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.example.week1.Data.UserInfo;
 
 import java.util.ArrayList;
 

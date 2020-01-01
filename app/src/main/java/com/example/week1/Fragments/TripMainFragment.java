@@ -27,7 +27,7 @@ import java.util.List;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
-public class EmptyFragement extends Fragment{
+public class TripMainFragment extends Fragment{
     private AutoScrollViewPager autoViewPager;
     private View v;
     private int selectedArea = -1;

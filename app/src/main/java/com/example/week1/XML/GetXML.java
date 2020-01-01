@@ -143,6 +143,7 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
                             bNumOfRows = false;
                         } else if (bTotalCount) {
                             pageInfo[1] = parser.getText();
+
                             bTotalCount = false;
                         } else if (bContentId) {
                             landMark.getTagList().put("contentid", parser.getText());
@@ -165,7 +166,7 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
                 eventType = parser.next();
             }
         } catch (Exception e) {
-            Log.d("Error", "------------------" + e + "--------------------");
+            e.printStackTrace();
         }
 
         return landMarksList;
@@ -179,9 +180,6 @@ public class GetXML  extends AsyncTask<String, Void, ArrayList<LandMark>> {
     @Override
     protected void onPostExecute(ArrayList<LandMark> document) {
         super.onPostExecute(document);
-        for (int i = 0; i < landMarksList.size(); i++) {
-            Log.d("Print Element", "---------" + landMarksList.get(i).getTagList().get("firstimage"));
-        }
         customProgressDialog.dismiss();
     }
 }

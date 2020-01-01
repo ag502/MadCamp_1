@@ -28,7 +28,6 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String uri = intent.getStringExtra("uri");
         Uri myuri = Uri.parse(uri);
-        Log.d("t", "-------------------------"+myuri);
 
         ImageView imageView = (ImageView) findViewById(R.id.clicked_image);
         imageView.setImageURI(myuri);

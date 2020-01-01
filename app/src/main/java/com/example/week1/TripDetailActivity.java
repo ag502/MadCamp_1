@@ -1,16 +1,11 @@
 package com.example.week1;
 
-
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,8 +48,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         mapy = intent.getStringExtra("mapy");
         String overview = intent.getStringExtra("overview");
         String homepage = intent.getStringExtra("homepage");
-
-        Log.d("TT", "-----------------------------------" + homepage);
 
         ImageView imageView = findViewById(R.id.firstimage);
         if (firstimage != null) {
@@ -93,7 +85,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         TextView linkText = findViewById(R.id.homepage);
 
         if (homepage != null) {
-            Log.d("PRINT", "++++++++++++++++++" + Html.fromHtml(homepage));
             linkText.setText(Html.fromHtml(homepage));
             Linkify.addLinks(linkText, Linkify.WEB_URLS);
             linkText.setMovementMethod(LinkMovementMethod.getInstance());
