@@ -3,6 +3,7 @@ package com.example.week1.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import java.util.List;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
-public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPressedListener{
+public class EmptyFragement extends Fragment{
     private AutoScrollViewPager autoViewPager;
     private View v;
     private int selectedArea = -1;
@@ -102,58 +103,6 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
             public void onClick(DialogInterface dialog, int pos) {
                 String selectedText = items[pos].toString();
                 selectedArea = APIConstant.AREA_LIST[pos];
-//                switch (selectedText) {
-//                    case "서울":
-//                        selectedArea = APIConstant.AREA_SEOUL;
-//                        break;
-//                    case "인천":
-//                        selectedArea = APIConstant.AREA_INCHEON;
-//                        break;
-//                    case "대전":
-//                        selectedArea = APIConstant.AREA_DAEJEON;
-//                        break;
-//                    case "대구":
-//                        selectedArea = APIConstant.AREA_DAEGU;
-//                        break;
-//                    case "광주":
-//                        selectedArea = APIConstant.AREA_GANGJU;
-//                        break;
-//                    case "부산":
-//                        selectedArea = APIConstant.AREA_BUSAN;
-//                        break;
-//                    case "울산":
-//                        selectedArea = APIConstant.AREA_ULSAN;
-//                        break;
-//                    case "세종":
-//                        selectedArea = APIConstant.AREA_SAEJONG;
-//                        break;
-//                    case "경기":
-//                        selectedArea = APIConstant.AREA_GYEONGGI;
-//                        break;
-//                    case "강원":
-//                        selectedArea = APIConstant.AREA_GANGWON;
-//                        break;
-//                    case "충북":
-//                        selectedArea = APIConstant.AREA_CHUNGBUK;
-//                        break;
-//                    case "충남":
-//                        selectedArea = APIConstant.AREA_CHUNGNAM;
-//                        break;
-//                    case "전북":
-//                        selectedArea = APIConstant.AREA_JEONBUK;
-//                    case "전남":
-//                        selectedArea = APIConstant.AREA_JEONNAM;
-//                        break;
-//                    case "경북":
-//                        selectedArea = APIConstant.AREA_GYEONGBUK;
-//                        break;
-//                    case "경남":
-//                        selectedArea = APIConstant.AREA_GYEONGNAM;
-//                        break;
-//                    case "제주":
-//                        selectedArea = APIConstant.AREA_JEJU;
-//                        break;
-//                }
                 Toast.makeText(getContext(), selectedText+"(으)로 이동합니다!", Toast.LENGTH_SHORT).show();
                 area.setText(selectedText);
             }
@@ -179,16 +128,5 @@ public class EmptyFragement extends Fragment implements MainActivity.OnBackKeyPr
             }
         });
         builder.show();
-    }
-
-    @Override
-    public void onBack() {
-        getFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        ((MainActivity) context).pushOnBackKeyPressedListener(this);
     }
 }

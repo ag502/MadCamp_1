@@ -1,5 +1,6 @@
 package com.example.week1.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -76,4 +77,5 @@ public class ContactFragment extends Fragment {
             contactRecyclerView.setAdapter(contactAdapter);
         }
     }
+
 }
