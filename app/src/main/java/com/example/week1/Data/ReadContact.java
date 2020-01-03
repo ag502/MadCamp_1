@@ -25,16 +25,13 @@ public class ReadContact {
 
             String[] projection = new String[] {
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-//                    ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID,
                     ContactsContract.CommonDataKinds.Phone.NUMBER,
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-//                    ContactsContract.RawContacts.Entity.RAW_CONTACT_ID,
-//                    ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY,
                     ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI
             };
 
 
-            contactCursor = context.getContentResolver().query(uri, projection, null, null, ContactsContract.Contacts.Entity.DISPLAY_NAME+" ASC");
+            contactCursor = context.getContentResolver().query(uri, projection, null, null, null);
 
 
 
@@ -47,16 +44,16 @@ public class ReadContact {
 
                     if (phoneNumber.substring(0, 3).equals("010")) {
                         phoneNumber = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 7) + "-" + phoneNumber.substring(7, 11);
-                    } else  {
+                    } else if (phoneNumber.length() == 10){
                         phoneNumber = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
                     }
+
                     users.add(new UserInfo(id, phoneNumber, name, thumbnail));
                 } while (contactCursor.moveToNext());
             }
             return users;
 
         } catch (Exception e) {
-            Log.d("ERROR", "----------" + e);
             contactCursor.close();
             return users;
         } finally {
